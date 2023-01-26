@@ -1,9 +1,8 @@
 # TODO upload image button
-
 # TODO Display image onto website
+
 # TODO For loop for different color swatches
-# TODO numpy identfy colors
-# TODO create chart for displaying Color and Color code
+# TODO identfy colors
 
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
@@ -15,6 +14,7 @@ import os
 
 import numpy as np
 from PIL import Image
+import cv2 as cv
 
 
 class PhotoForm(FlaskForm):
@@ -37,12 +37,29 @@ def index():
         f.save(os.path.join(
             file_path))
     else:
-        file_path = 'static/drivers_license_front.jpeg'
+        file_path = 'static/MG_7905.jpg'
 
     my_img = Image.open(file_path)
-    img_array = np.array(my_img)
-    print(img_array.shape)
+
+    find_top_colors(my_img)
     return render_template('index.html', form=form, file_path=file_path)
+
+def find_top_colors(image):
+    img_array = np.array(image)
+
+    height, width, _ = np.shape(img_array)
+
+    # cluster of the data
+
+    data = np.reshape(img_array, (height * width, 3))
+    data = np.float32(data)
+
+    number_clusters = 10
+
+    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    flags = cv.KMEANS_RANDOM_CENTERS
+    compactness, labels, centers = cv.kmeans(data, number_clusters, None, criteria, 10, flags)
+    return flags
 
 if __name__ == '__main__':
     app.run(debug=True)
