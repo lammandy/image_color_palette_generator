@@ -18,7 +18,7 @@
   {% endif %}
   {% endwith %}
     <div class="jumbotron">
-      <h1>Welcome to Flask-Bootstrap</h1>
+      <h1>Image Color Palette Generator</h1>
       <img src = {{ file_path }} , width="400", height=auto >
       <form class="form" method="POST" enctype="multipart/form-data" role="form"> <!-- {{ wtf.form_field(form.photo) }} --> {{ wtf.quick_form(form, enctype="multipart/form-data") }} </form>
       <p class="text-center">
@@ -39,23 +39,21 @@
           </tr>
         </thead>
         <tbody>
+          {% for i, color in hex_color_codes %}
           <tr>
             <td>
-              1
+              {{ i }}
             </td>
             <td>
-              Color swatch
+              <img src= "static/{{ i }}.png">
             </td>
             <td>
-              swatch #
+              {{color}}
             </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
-      <p>
-        <a class="btn btn-lg btn-default" role="button"
-           href="http://pythonhosted.org/Flask-Bootstrap" >Show docs</a>
-      </p>
     </div>
    </div>
 {% endblock %}
